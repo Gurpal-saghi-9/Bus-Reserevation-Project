@@ -116,11 +116,22 @@ app.get('/api/placeholder/:width/:height', (req, res) => {
     res.set('Content-Type', 'image/svg+xml');
     res.send(`
         <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-            <rect width="100%" height="100%" fill="#3a0ca3" />
-            <text x="50%" y="50%" font-family="Arial" font-size="24" fill="white" text-anchor="middle">Bus Image</text>
-            <rect x="10%" y="70%" width="80%" height="10%" fill="#4361ee" rx="10" />
-            <circle cx="30%" cy="80%" r="5%" fill="#333" />
-            <circle cx="70%" cy="80%" r="5%" fill="#333" />
+            <defs>
+                <linearGradient id="busGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2563eb" />
+                    <stop offset="100%" stop-color="#0f172a" />
+                </linearGradient>
+                <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.3" />
+                </filter>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#busGradient)" rx="10" />
+            <rect x="10%" y="50%" width="80%" height="30%" fill="#ffffff" opacity="0.1" rx="5" />
+            <rect x="5%" y="70%" width="90%" height="15%" fill="#10b981" opacity="0.8" rx="5" filter="url(#shadow)" />
+            <circle cx="25%" cy="85%" r="5%" fill="#333" />
+            <circle cx="75%" cy="85%" r="5%" fill="#333" />
+            <text x="50%" y="40%" font-family="Arial" font-size="24" fill="white" text-anchor="middle" font-weight="bold">Premium Bus</text>
+            <text x="50%" y="65%" font-family="Arial" font-size="16" fill="white" text-anchor="middle">Luxury Travel Experience</text>
         </svg>
     `);
 });

@@ -1,10 +1,14 @@
 :root {
-    --primary: #4361ee;
-    --secondary: #3a0ca3;
-    --success: #4cc9f0;
-    --danger: #f72585;
-    --light: #f8f9fa;
-    --dark: #212529;
+    --primary: #2563eb;      /* Royal Blue */
+    --secondary: #0f172a;    /* Dark Navy */
+    --success: #10b981;      /* Emerald Green */
+    --danger: #ef4444;       /* Red */
+    --light: #f1f5f9;        /* Light Gray Background */
+    --dark: #1e293b;         /* Slate Gray */
+    --accent: #8b5cf6;       /* Purple Accent */
+    --text: #334155;         /* Dark Slate */
+    --card-bg: #ffffff;      /* Card Background */
+    --highlight: #f59e0b;    /* Amber Highlight */
 }
 
 * {
@@ -16,7 +20,8 @@
 
 body {
     background-color: var(--light);
-    color: #333;
+    color: var(--text);
+    background-image: linear-gradient(to bottom right, rgba(37, 99, 235, 0.05), rgba(139, 92, 246, 0.05));
 }
 
 .container {
@@ -29,11 +34,29 @@ body {
 header {
     background: linear-gradient(135deg, var(--secondary), var(--primary));
     color: white;
-    padding: 25px 0;
+    padding: 35px 0;
     text-align: center;
     border-radius: 12px;
     margin-bottom: 30px;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    z-index: 0;
+}
+
+header h1, header p {
+    position: relative;
+    z-index: 1;
 }
 
 h1 {
@@ -69,11 +92,12 @@ nav {
 }
 
 .panel {
-    background-color: white;
+    background-color: var(--card-bg);
     border-radius: 12px;
     padding: 25px;
     margin-bottom: 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(203, 213, 225, 0.3);
 }
 
 .form-row {
@@ -189,11 +213,12 @@ input:focus, select:focus {
 }
 
 .bus-card {
-    background-color: white;
+    background-color: var(--card-bg);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     transition: all 0.3s;
+    border: 1px solid rgba(203, 213, 225, 0.3);
 }
 
 .bus-card:hover {
