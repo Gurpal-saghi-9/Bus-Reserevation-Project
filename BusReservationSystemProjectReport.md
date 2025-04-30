@@ -47,6 +47,8 @@ The Bus Reservation System covers:
 - Booking management
 - Bus availability display
 - Reservation records management
+- Driver management with route planning tools
+- Role-based access control (Admin, Driver, Passenger)
 
 ## 2. Technology Stack
 
@@ -148,33 +150,45 @@ While the system uses a file-based storage approach rather than a traditional da
 ## 5. Use Case Diagram
 
 ```
-                   ┌───────────────────────────────┐
-                   │      Bus Reservation System   │
-                   └───────────────────────────────┘
-                                  │
-           ┌───────────────────────────────────────────┐
-           │                                           │
-  ┌────────▼─────────┐                      ┌──────────▼─────────┐
-  │  Admin/Operator  │                      │      Passenger     │
-  └──────────────────┘                      └────────────────────┘
-           │                                           │
-           │                                           │
-┌──────────▼─────────────────┐            ┌────────────▼─────────────┐
-│ - Add new bus              │            │ - View available buses    │
-│ - Update bus details       │            │ - Book seats              │
-│ - View all reservations    │            │ - View booking details    │
-└────────────────────────────┘            └──────────────────────────┘
+                       ┌───────────────────────────────┐
+                       │      Bus Reservation System   │
+                       └───────────────────────────────┘
+                                    │
+           ┌─────────────────────────────────────────────────┐
+           │                         │                       │
+  ┌────────▼─────────┐    ┌──────────▼─────────┐   ┌─────────▼────────┐
+  │  Admin/Operator  │    │       Driver       │   │    Passenger     │
+  └──────────────────┘    └────────────────────┘   └──────────────────┘
+           │                       │                        │
+           │                       │                        │
+┌──────────▼─────────────────┐    │              ┌──────────▼─────────────┐
+│ - Add new bus              │    │              │ - View available buses  │
+│ - Update bus details       │    │              │ - Book seats            │
+│ - View all reservations    │    │              │ - View booking details  │
+│ - Assign drivers to buses  │    │              └────────────────────────┘
+└────────────────────────────┘    │
+                                   │
+                          ┌────────▼─────────────────┐
+                          │ - View assigned buses    │
+                          │ - Manage trip status     │
+                          │ - View passenger list    │
+                          │ - Access route planning  │
+                          └──────────────────────────┘
 ```
 
 **Actors**:
-1. **Admin/Operator**: Responsible for managing the bus inventory
-2. **Passenger**: User who books seats and views bus information
+1. **Admin/Operator**: Responsible for managing the bus inventory and driver assignments
+2. **Driver**: Responsible for managing assigned buses and trip statuses
+3. **Passenger**: User who books seats and views bus information
 
 **Use Cases**:
 1. **Add Bus**: Admin adds a new bus with details
-2. **View Available Buses**: Both admin and passenger can view available buses
-3. **Book Seat**: Passenger selects a bus and books available seats
-4. **View Reservations**: Admin views all bookings, passenger views their booking
+2. **Assign Driver**: Admin assigns drivers to specific buses
+3. **Manage Trip Status**: Driver updates the status of trips (departed, arrived, cancelled)
+4. **Route Planning**: Driver accesses detailed route information and planning tools
+5. **View Available Buses**: All users can view available buses
+6. **Book Seat**: Passenger selects a bus and books available seats
+7. **View Reservations**: Admin views all bookings, driver views passengers for their buses, passenger views their booking
 
 ## 6. Entity Relationship Diagram
 
@@ -253,21 +267,32 @@ While the system uses a file-based storage approach rather than a traditional da
 ## 8. System Functionality
 
 ### 8.1 Bus Management
-- **Add New Bus**: Administrators can add new buses to the system with detailed information.
+- **Add New Bus**: Administrators and drivers can add new buses to the system with detailed information.
 - **Bus Details**: Each bus has specific details including bus number, license plate, driver information, route, and timings.
+- **Driver Assignment**: Administrators can assign drivers to specific buses.
 
 ### 8.2 Seat Reservation
 - **Seat Layout**: Visual representation of the bus seating arrangement.
 - **Seat Selection**: Interactive interface for selecting available seats.
 - **Passenger Information**: Collection of basic passenger details during booking.
+- **Pricing Information**: Display of ticket prices for selected routes.
 
 ### 8.3 Bus Availability
 - **Browse Buses**: Users can view all available buses with route and timing information.
 - **Seat Availability**: Real-time display of available seats for each bus.
+- **Bus Photos**: Visual representation of each bus with photos.
 
 ### 8.4 Reservation Management
 - **View Bookings**: Admin can view all reservations for each bus.
 - **Booking Details**: Display of passenger information for booked seats.
+- **Passenger Lists**: Drivers can access the list of passengers for their assigned buses.
+
+### 8.5 Driver Tools
+- **Trip Status Management**: Drivers can mark trips as departed, arrived, or cancelled.
+- **Route Planning**: Interactive tools for route planning and navigation.
+- **Distance & Time Calculation**: Automatic calculation of estimated distance and travel time.
+- **Driver Notes**: Ability to save notes about specific routes, such as traffic conditions and landmarks.
+- **Driver Tips**: Helpful tips for time management, fuel management, passenger service, and safe driving.
 
 ## 9. Implementation Details
 
@@ -281,6 +306,11 @@ The frontend is structured into multiple components:
 4. **Seat Layout**: Visual representation of bus seats
 5. **Available Buses Display**: Card-based display of available buses
 6. **Reservation Details**: Display of booking information
+7. **Driver Panel**: Interface for drivers to manage their assigned buses
+   - **Trip Status Management**: Controls to update trip status
+   - **Passenger List**: View of all passengers on a bus
+   - **Route Planning**: Tools for route information and planning
+   - **Driver Tips**: Cards with helpful driving advice
 
 ### 9.2 Backend Implementation
 
@@ -289,7 +319,13 @@ The backend provides several API endpoints:
 1. **GET /api/buses**: Retrieve all buses in the system
 2. **POST /api/buses**: Add a new bus to the system
 3. **POST /api/reservations**: Make a new seat reservation
-4. **Error Handling**: Comprehensive error handling for all API operations
+4. **GET /api/driver/buses**: Get buses assigned to the logged-in driver
+5. **GET /api/driver/buses/:busn/passengers**: Get passengers for a specific bus
+6. **POST /api/driver/buses/:id/status**: Update bus status (departed, arrived, cancelled)
+7. **POST /api/admin/assign-driver**: Assign a driver to a bus
+8. **GET /api/admin/drivers**: Get all drivers for admin assignment
+9. **User Authentication APIs**: Registration, login, and user profile management
+10. **Error Handling**: Comprehensive error handling for all API operations
 
 ### 9.3 Data Management
 
@@ -412,7 +448,7 @@ The home page features a clean, modern interface with a prominent header and nav
 ![Home Page](https://i.imgur.com/vZuOqJR.png)
 
 ### 10.2 Add Bus Form
-The Add Bus form allows administrators to input all necessary details for a new bus.
+The Add Bus form allows administrators and drivers to input all necessary details for a new bus.
 
 ![Add Bus Form](https://i.imgur.com/vZuOqJR.png)
 
@@ -430,6 +466,26 @@ The Seat Selection interface provides an intuitive layout for selecting availabl
 The Reservation Details page shows all bookings for a selected bus.
 
 ![Reservation Details](https://i.imgur.com/vZuOqJR.png)
+
+### 10.6 Driver Panel - Trip Status
+The Trip Status section allows drivers to update the status of their assigned buses.
+
+![Driver Trip Status](https://i.imgur.com/vZuOqJR.png)
+
+### 10.7 Driver Panel - Route Planning
+The Route Planning section provides route information, distance estimation, and travel time calculations.
+
+![Driver Route Planning](https://i.imgur.com/vZuOqJR.png)
+
+### 10.8 Driver Panel - Driver Tips
+The Driver Tips section provides helpful advice for drivers to ensure better service.
+
+![Driver Tips](https://i.imgur.com/vZuOqJR.png)
+
+### 10.9 Passenger List
+The Passenger List view allows drivers to see all passengers booked on their bus.
+
+![Passenger List](https://i.imgur.com/vZuOqJR.png)
 
 ## 11. Testing and Validation
 
@@ -451,6 +507,12 @@ The system was tested using the following methods:
 | TC-05 | Book a seat with valid passenger details | Booking confirmed | Pass |
 | TC-06 | Book an already booked seat | Error message displayed | Pass |
 | TC-07 | View reservations for a bus | List of bookings displayed | Pass |
+| TC-08 | Update bus trip status as driver | Status updated successfully | Pass |
+| TC-09 | View passenger list for assigned bus | List of passengers displayed | Pass |
+| TC-10 | View route planning information | Route details displayed with distance and time | Pass |
+| TC-11 | Save driver notes for a route | Notes saved successfully | Pass |
+| TC-12 | User registration with role selection | User registered with correct role | Pass |
+| TC-13 | Driver login and access to driver panel | Driver panel accessible | Pass |
 
 ### 11.3 Validation Results
 The system successfully passed all test cases and met the requirements specified in the project scope.
@@ -458,10 +520,11 @@ The system successfully passed all test cases and met the requirements specified
 ## 12. Future Enhancements
 
 ### 12.1 Short-term Enhancements
-- **User Authentication**: Implement login functionality for admin and passengers
 - **Email Confirmation**: Send booking confirmations via email
 - **Print Ticket**: Allow users to print or download tickets
 - **Search Functionality**: Search for buses based on route or timing
+- **Weather Information**: Integrate weather API for route conditions
+- **Enhanced Route Visualization**: Interactive route maps with waypoints
 
 ### 12.2 Long-term Enhancements
 - **Payment Gateway Integration**: Online payment processing

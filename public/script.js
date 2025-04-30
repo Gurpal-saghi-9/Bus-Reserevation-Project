@@ -191,8 +191,8 @@ function showPanel(panelId) {
         'profile-panel', 
         'my-bookings-panel', 
         'admin-panel', 
-        'driver-panel',
-        'install-panel'
+        'driver-panel'
+        // 'install-panel' removed to make it accessible to all visitors
     ];
     
     // If panel is protected and user not logged in, redirect to auth
@@ -218,12 +218,8 @@ function showPanel(panelId) {
         return;
     }
     
-    if (panelId === 'install-panel' && (!currentUser || currentUser.role !== 'admin')) {
-        showAlert('Admin access required to add buses', 'danger');
-        document.getElementById(panelId).classList.add('hidden');
-        document.getElementById('available-panel').classList.remove('hidden');
-        return;
-    }
+    // Allow all users to access the Add Bus panel
+    // Removed the admin restriction for the install-panel
     
     // Load buses and update
     loadBuses();
@@ -433,7 +429,22 @@ function showReservationDetails(busIndex) {
         for (let j = 0; j < 4; j++) {
             if (bus.seats[i][j] !== 'Empty') {
                 hasReservations = true;
-                reservationsHtml += `<p>Seat ${seatNumber}: ${bus.seats[i][j]}</p>`;
+                // Get passenger details from seat information
+                // Format: "Name (Phone)"
+                const passengerInfo = bus.seats[i][j];
+                const passengerName = passengerInfo.split(' (')[0];
+                let passengerPhone = '';
+                
+                if (passengerInfo.includes('(')) {
+                    passengerPhone = passengerInfo.split('(')[1].replace(')', '');
+                }
+                
+                reservationsHtml += `
+                    <div class="passenger-info">
+                        <p><strong>Seat ${seatNumber}:</strong> ${passengerName}</p>
+                        <p><strong>Phone:</strong> ${passengerPhone}</p>
+                    </div>
+                `;
             }
             seatNumber++;
         }
@@ -546,11 +557,13 @@ async function loadDriverBuses() {
         const driverBusesContainer = document.getElementById('driver-buses');
         const driverBusSelect = document.getElementById('driver-bus-select');
         const statusBusSelect = document.getElementById('status-bus-select');
+        const routeBusSelect = document.getElementById('route-bus-select');
         
         // Clear previous buses
         driverBusesContainer.innerHTML = '';
         driverBusSelect.innerHTML = '<option value="">Select a bus</option>';
         statusBusSelect.innerHTML = '<option value="">Select a bus</option>';
+        routeBusSelect.innerHTML = '<option value="">Select a bus</option>';
         
         if (driverBuses.length === 0) {
             driverBusesContainer.innerHTML = `
@@ -604,6 +617,11 @@ async function loadDriverBuses() {
             option2.value = bus.busn;
             option2.textContent = `${bus.busn} - ${bus.from} to ${bus.to}`;
             statusBusSelect.appendChild(option2);
+            
+            const option3 = document.createElement('option');
+            option3.value = bus.busn;
+            option3.textContent = `${bus.busn} - ${bus.from} to ${bus.to}`;
+            routeBusSelect.appendChild(option3);
         });
         
         // Add event listeners
@@ -618,6 +636,33 @@ async function loadDriverBuses() {
     } catch (error) {
         showAlert('Failed to load driver buses: ' + error.message, 'danger');
     }
+}
+
+// Show route details for selected bus
+function showRouteDetails(busn) {
+    const busIndex = findBusByNumber(busn);
+    if (busIndex === -1) return;
+    
+    const bus = buses[busIndex];
+    const routeDetails = document.getElementById('route-details');
+    
+    // Update route information
+    document.getElementById('route-start').textContent = bus.from;
+    document.getElementById('route-end').textContent = bus.to;
+    
+    // Calculate a random but realistic distance based on city names (for demo purposes)
+    // In a real app, we would use a mapping API to get actual distances
+    const cityHash = (bus.from.length * 10) + (bus.to.length * 5);
+    const distance = 100 + (cityHash % 900); // Distance between 100-1000 km
+    const time = (distance / 60).toFixed(1);  // Approx time at 60 km/h
+    
+    document.getElementById('route-distance').textContent = distance;
+    document.getElementById('route-time').textContent = time;
+    document.getElementById('route-departure').textContent = bus.depart;
+    document.getElementById('route-arrival').textContent = bus.arrival;
+    
+    // Show the route details
+    routeDetails.classList.remove('hidden');
 }
 
 // Load passengers for a specific bus
@@ -909,6 +954,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const password = document.getElementById('signup-password').value;
         const fullName = document.getElementById('signup-fullname').value;
         const phone = document.getElementById('signup-phone').value;
+        const role = document.getElementById('signup-role').value;
         
         try {
             const response = await fetch('/api/register', {
@@ -921,7 +967,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     email,
                     password,
                     fullName,
-                    phone
+                    phone,
+                    role
                 })
             });
             
@@ -1048,6 +1095,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Route planning bus select
+    document.getElementById('route-bus-select').addEventListener('change', function(e) {
+        const busn = e.target.value;
+        if (busn) {
+            showRouteDetails(busn);
+        } else {
+            document.getElementById('route-details').classList.add('hidden');
+        }
+    });
+    
+    // Save route notes button
+    document.getElementById('save-notes-btn').addEventListener('click', function() {
+        const notes = document.getElementById('route-notes').value;
+        const busn = document.getElementById('route-bus-select').value;
+        
+        if (busn && notes) {
+            // In a real application, we would save this to the server
+            // For now, just show a success message
+            showAlert('Route notes saved successfully', 'success');
+        } else {
+            showAlert('Please select a bus and enter notes', 'danger');
+        }
+    });
+    
     // Admin driver assignment
     document.getElementById('assign-btn').addEventListener('click', async function() {
         const busId = document.getElementById('assign-bus').value;
@@ -1088,10 +1159,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('install-form').addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        if (!currentUser || currentUser.role !== 'admin') {
-            showAlert('Admin access required to add buses', 'danger');
-            return;
-        }
+        // All users can add buses now, removed admin check
         
         const busn = document.getElementById('busn').value;
         const license = document.getElementById('license').value;

@@ -59,7 +59,7 @@
             <button class="nav-btn" onclick="showPanel('available-panel')">Available Buses</button>
             <button class="nav-btn" onclick="showPanel('reservation-panel')">Book Seat</button>
             <button class="nav-btn" onclick="showPanel('show-panel')">View Reservations</button>
-            <button class="nav-btn admin-only hidden" onclick="showPanel('install-panel')">Add New Bus</button>
+            <button class="nav-btn" onclick="showPanel('install-panel')">Add New Bus</button>
             <button class="nav-btn admin-only hidden" onclick="showPanel('admin-panel')">Admin Panel</button>
             <button class="nav-btn driver-only hidden" onclick="showPanel('driver-panel')">Driver Panel</button>
         </nav>
@@ -116,6 +116,13 @@
                             <div class="form-group">
                                 <label for="signup-phone">Phone Number</label>
                                 <input type="text" id="signup-phone" placeholder="Enter your phone number">
+                            </div>
+                            <div class="form-group">
+                                <label for="signup-role">I want to register as</label>
+                                <select id="signup-role">
+                                    <option value="passenger">Passenger</option>
+                                    <option value="driver">Driver</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success">Sign Up</button>
@@ -372,6 +379,68 @@
                 </div>
                 
                 <div class="driver-section">
+                    <h3>Add New Bus</h3>
+                    <form id="driver-bus-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="driver-busn">Bus Number:</label>
+                                <input type="text" id="driver-busn" name="driver-busn" placeholder="e.g. B1234" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="driver-license">License Number:</label>
+                                <input type="text" id="driver-license" name="driver-license" placeholder="e.g. KA-01-F-2022" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="driver-arrival">Arrival Time:</label>
+                                <input type="time" id="driver-arrival" name="driver-arrival" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="driver-depart">Departure Time:</label>
+                                <input type="time" id="driver-depart" name="driver-depart" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="driver-from">From:</label>
+                                <input type="text" id="driver-from" name="driver-from" placeholder="Starting point" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="driver-to">To:</label>
+                                <input type="text" id="driver-to" name="driver-to" placeholder="Destination" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="driver-bus-type">Bus Type:</label>
+                                <select id="driver-bus-type" name="driver-bus-type" required>
+                                    <option value="">Select bus type</option>
+                                    <option value="Sleeper">Sleeper</option>
+                                    <option value="Semi-Sleeper">Semi-Sleeper</option>
+                                    <option value="AC">AC</option>
+                                    <option value="Non-AC">Non-AC</option>
+                                    <option value="Luxury">Luxury</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="driver-ticket-price">Ticket Price (₹):</label>
+                                <input type="number" id="driver-ticket-price" name="driver-ticket-price" min="1" step="0.01" placeholder="e.g. 999.99" required>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success">Add Bus</button>
+                    </form>
+                </div>
+                
+                <div class="driver-section">
                     <h3>Passenger List</h3>
                     <div class="passenger-selector">
                         <select id="driver-bus-select">
@@ -398,6 +467,88 @@
                         <button class="btn btn-warning" id="bus-departed-btn">Mark as Departed</button>
                         <button class="btn btn-success" id="bus-arrived-btn">Mark as Arrived</button>
                         <button class="btn btn-danger" id="bus-cancelled-btn">Cancel Trip</button>
+                    </div>
+                </div>
+                
+                <div class="driver-section">
+                    <h3>Route Planning</h3>
+                    <div class="route-planning">
+                        <div class="form-group">
+                            <label for="route-bus-select">Select Bus:</label>
+                            <select id="route-bus-select">
+                                <option value="">Select a bus</option>
+                            </select>
+                        </div>
+                        
+                        <div class="route-details hidden" id="route-details">
+                            <div class="route-map">
+                                <h4>Route Map</h4>
+                                <div class="route-map-container">
+                                    <div class="route-stops">
+                                        <div class="route-stop">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span class="route-stop-name" id="route-start"></span>
+                                        </div>
+                                        <div class="route-line"></div>
+                                        <div class="route-stop">
+                                            <i class="fas fa-flag-checkered"></i>
+                                            <span class="route-stop-name" id="route-end"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="route-info">
+                                <h4>Route Information</h4>
+                                <p><strong>Estimated Distance:</strong> <span id="route-distance">0</span> km</p>
+                                <p><strong>Estimated Travel Time:</strong> <span id="route-time">0</span> hours</p>
+                                <p><strong>Scheduled Departure:</strong> <span id="route-departure"></span></p>
+                                <p><strong>Scheduled Arrival:</strong> <span id="route-arrival"></span></p>
+                            </div>
+                            
+                            <div class="route-notes">
+                                <h4>Driver Notes</h4>
+                                <textarea id="route-notes" placeholder="Add notes about this route (traffic conditions, landmarks, etc.)"></textarea>
+                                <button class="btn btn-primary" id="save-notes-btn">Save Notes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="driver-section">
+                    <h3>Driver Tips</h3>
+                    <div class="driver-tips">
+                        <div class="tip-card">
+                            <div class="tip-icon"><i class="fas fa-clock"></i></div>
+                            <div class="tip-content">
+                                <h4>Time Management</h4>
+                                <p>Ensure you arrive at the departure point at least 30 minutes before scheduled departure.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tip-card">
+                            <div class="tip-icon"><i class="fas fa-gas-pump"></i></div>
+                            <div class="tip-content">
+                                <h4>Fuel Check</h4>
+                                <p>Always check fuel levels before departure and plan refueling stops for longer journeys.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tip-card">
+                            <div class="tip-icon"><i class="fas fa-user-friends"></i></div>
+                            <div class="tip-content">
+                                <h4>Passenger Service</h4>
+                                <p>Greet all passengers with a smile and assist with baggage loading when possible.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tip-card">
+                            <div class="tip-icon"><i class="fas fa-road"></i></div>
+                            <div class="tip-content">
+                                <h4>Safe Driving</h4>
+                                <p>Maintain safe speeds and follow all traffic rules. Passenger safety is your top priority.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

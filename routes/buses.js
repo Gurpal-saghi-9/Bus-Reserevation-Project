@@ -388,6 +388,95 @@ router.post('/driver/buses/:busn/status', isDriver, async (req, res) => {
 });
 
 /**
+ * @route POST /api/driver/buses
+ * @desc Allow drivers to add a new bus
+ * @access Private (Driver only)
+ */
+router.post('/driver/buses', isDriver, async (req, res) => {
+  try {
+    const { 
+      busn, license, arrival, depart, 
+      from, to, busType, ticketPrice, image, seats 
+    } = req.body;
+    
+    // Validate required fields
+    if (!busn || !license || !from || !to || !depart || !arrival || !busType || !ticketPrice) {
+      return res.status(400).json({ message: 'Please provide all required fields' });
+    }
+    
+    // Check if bus number already exists
+    const existingBus = await db.select().from(buses).where(eq(buses.busNumber, busn)).limit(1);
+    if (existingBus.length > 0) {
+      return res.status(400).json({ message: 'Bus with this number already exists' });
+    }
+    
+    // Get current driver info
+    const driverId = req.session.user.id;
+    
+    // Create the bus
+    const newBus = await db.insert(buses).values({
+      busNumber: busn,
+      licenseNumber: license,
+      driverId,
+      busType,
+      from,
+      to,
+      departureTime: depart,
+      arrivalTime: arrival,
+      ticketPrice: parseFloat(ticketPrice),
+      imageUrl: image || `/api/placeholder/500/300`,
+      totalSeats: 32 // Default to 32 seats (8 rows x 4 columns)
+    }).returning();
+    
+    if (newBus.length === 0) {
+      return res.status(500).json({ message: 'Failed to create bus' });
+    }
+    
+    // Create seats for the bus
+    const seatPromises = [];
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 4; col++) {
+        const seatNumber = row * 4 + col + 1;
+        seatPromises.push(
+          db.insert(busSeats).values({
+            busId: newBus[0].id,
+            seatNumber,
+            rowNumber: row,
+            columnNumber: col,
+            isBooked: false
+          })
+        );
+      }
+    }
+    
+    await Promise.all(seatPromises);
+    
+    // Format the response
+    const formattedBus = {
+      id: newBus[0].id,
+      busn: newBus[0].busNumber,
+      license: newBus[0].licenseNumber,
+      driver: req.session.user.fullName || req.session.user.username,
+      driverPhone: req.session.user.phone || 'Not provided',
+      arrival: newBus[0].arrivalTime,
+      depart: newBus[0].departureTime,
+      from: newBus[0].from,
+      to: newBus[0].to,
+      busType: newBus[0].busType,
+      ticketPrice: newBus[0].ticketPrice,
+      image: newBus[0].imageUrl,
+      seats: Array(8).fill().map(() => Array(4).fill('Empty')),
+      status: "scheduled"
+    };
+    
+    res.status(201).json(formattedBus);
+  } catch (error) {
+    console.error('Error creating bus by driver:', error);
+    res.status(500).json({ message: 'Server error while creating bus' });
+  }
+});
+
+/**
  * @route GET /api/driver/buses/:busn/passengers
  * @desc Get all passengers for a specific bus
  * @access Private (Driver or Admin)
