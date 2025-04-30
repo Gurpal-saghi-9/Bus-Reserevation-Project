@@ -111,9 +111,9 @@ router.get('/buses/:id', async (req, res) => {
 /**
  * @route POST /api/buses
  * @desc Create a new bus
- * @access Private (Admin only)
+ * @access Private (Any authenticated user)
  */
-router.post('/buses', isAdmin, async (req, res) => {
+router.post('/buses', isAuth, async (req, res) => {
   try {
     const { 
       busn, license, driver, driverPhone, arrival, depart, 
