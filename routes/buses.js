@@ -58,15 +58,36 @@ router.get('/buses/:id', async (req, res) => {
     
     const bus = busResult[0];
     
-    // Get bus seats
+    // Get bus seats along with passenger details
     const busSeatsResult = await db.select().from(busSeats).where(eq(busSeats.busId, bus.id));
+    
+    // Get bookings for this bus to retrieve passenger information
+    const busBookings = await db.select({
+      seatId: bookings.seatId,
+      passengerName: bookings.passengerName,
+      passengerPhone: bookings.passengerPhone
+    }).from(bookings).where(eq(bookings.busId, bus.id));
+    
+    // Create a map of seatId to passenger info for quick lookup
+    const passengerBySeatId = {};
+    busBookings.forEach(booking => {
+      passengerBySeatId[booking.seatId] = {
+        name: booking.passengerName,
+        phone: booking.passengerPhone
+      };
+    });
     
     // Format the seats into a 2D array (8 rows x 4 columns)
     const seatsArray = Array(8).fill().map(() => Array(4).fill('Empty'));
     
     busSeatsResult.forEach(seat => {
       if (seat.isBooked) {
-        seatsArray[seat.rowNumber][seat.columnNumber] = 'Booked';
+        const passenger = passengerBySeatId[seat.id];
+        if (passenger) {
+          seatsArray[seat.rowNumber][seat.columnNumber] = `${passenger.name} (${passenger.phone})`;
+        } else {
+          seatsArray[seat.rowNumber][seat.columnNumber] = 'Booked';
+        }
       }
     });
     
@@ -317,12 +338,33 @@ router.get('/driver/buses', isDriver, async (req, res) => {
       // Get bus seats
       const busSeatsResult = await db.select().from(busSeats).where(eq(busSeats.busId, bus.id));
       
+      // Get bookings for this bus to retrieve passenger information
+      const busBookings = await db.select({
+        seatId: bookings.seatId,
+        passengerName: bookings.passengerName,
+        passengerPhone: bookings.passengerPhone
+      }).from(bookings).where(eq(bookings.busId, bus.id));
+      
+      // Create a map of seatId to passenger info for quick lookup
+      const passengerBySeatId = {};
+      busBookings.forEach(booking => {
+        passengerBySeatId[booking.seatId] = {
+          name: booking.passengerName,
+          phone: booking.passengerPhone
+        };
+      });
+      
       // Format the seats into a 2D array (8 rows x 4 columns)
       const seatsArray = Array(8).fill().map(() => Array(4).fill('Empty'));
       
       busSeatsResult.forEach(seat => {
         if (seat.isBooked) {
-          seatsArray[seat.rowNumber][seat.columnNumber] = 'Booked';
+          const passenger = passengerBySeatId[seat.id];
+          if (passenger) {
+            seatsArray[seat.rowNumber][seat.columnNumber] = `${passenger.name} (${passenger.phone})`;
+          } else {
+            seatsArray[seat.rowNumber][seat.columnNumber] = 'Booked';
+          }
         }
       });
       
@@ -494,13 +536,37 @@ router.get('/driver/buses/:busn/passengers', isAdminOrDriver, async (req, res) =
     
     const busId = busResult[0].id;
     
-    // Get bookings and passenger data
-    // For now, return mock data - we'll implement this properly with the bookings table
-    const passengers = [
-      { name: 'John Doe', seatNumber: 4, phone: '9876543210' },
-      { name: 'Jane Smith', seatNumber: 8, phone: '8765432109' },
-      { name: 'Bob Johnson', seatNumber: 15, phone: '7654321098' }
-    ];
+    // Get all bookings for this bus
+    const passengerBookings = await db.select({
+      id: bookings.id,
+      passengerName: bookings.passengerName,
+      passengerPhone: bookings.passengerPhone,
+      seatId: bookings.seatId,
+      status: bookings.status,
+      createdAt: bookings.createdAt
+    })
+    .from(bookings)
+    .where(eq(bookings.busId, busId));
+    
+    // Get all seat information for the booked seats
+    const seatIds = passengerBookings.map(booking => booking.seatId);
+    const seatData = await db.select().from(busSeats).where(eq(busSeats.busId, busId));
+    
+    // Create a map of seatId to seatNumber
+    const seatMap = {};
+    seatData.forEach(seat => {
+      seatMap[seat.id] = seat.seatNumber;
+    });
+    
+    // Format passenger data with seat numbers
+    const passengers = passengerBookings.map(booking => ({
+      name: booking.passengerName,
+      phone: booking.passengerPhone,
+      seatNumber: seatMap[booking.seatId] || 'Unknown',
+      bookingId: booking.id,
+      bookingDate: booking.createdAt,
+      status: booking.status
+    }));
     
     res.status(200).json(passengers);
   } catch (error) {
