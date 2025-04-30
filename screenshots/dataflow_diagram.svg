@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="700" height="650" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .process {
+            fill: #f8f9fa;
+            stroke: #4361ee;
+            stroke-width: 2;
+        }
+        .entity {
+            fill: #f8f9fa;
+            stroke: #f72585;
+            stroke-width: 2;
+        }
+        .datastore {
+            fill: #f8f9fa;
+            stroke: #4cc9f0;
+            stroke-width: 2;
+        }
+        .system {
+            fill: #f8f9fa;
+            stroke: #3a0ca3;
+            stroke-width: 2;
+        }
+        .label {
+            fill: #212529;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        .flow-label {
+            fill: #3a0ca3;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+        .title {
+            fill: #3a0ca3;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .flow {
+            stroke: #4361ee;
+            stroke-width: 1.5;
+            fill: none;
+            marker-end: url(#arrowhead);
+        }
+    </style>
+    
+    <!-- Arrow marker definition -->
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#4361ee" />
+        </marker>
+    </defs>
+    
+    <!-- Context Diagram (Level 0) -->
+    <text x="350" y="30" text-anchor="middle" class="title">Context Diagram (Level 0)</text>
+    
+    <!-- External Entities -->
+    <rect x="50" y="80" width="120" height="60" rx="5" ry="5" class="entity" />
+    <text x="110" y="115" text-anchor="middle" class="label">Admin</text>
+    
+    <rect x="50" y="200" width="120" height="60" rx="5" ry="5" class="entity" />
+    <text x="110" y="235" text-anchor="middle" class="label">Passenger</text>
+    
+    <!-- System -->
+    <rect x="350" y="130" width="150" height="100" rx="10" ry="10" class="system" />
+    <text x="425" y="185" text-anchor="middle" class="title">Bus Reservation System</text>
+    
+    <!-- Data Flows -->
+    <path d="M 170 100 L 350 150" class="flow" />
+    <text x="240" y="110" text-anchor="middle" class="flow-label">Bus Information</text>
+    
+    <path d="M 170 210 L 350 190" class="flow" />
+    <text x="240" y="185" text-anchor="middle" class="flow-label">Booking Request</text>
+    
+    <path d="M 350 210 L 170 240" class="flow" />
+    <text x="240" y="240" text-anchor="middle" class="flow-label">Booking Confirmation</text>
+    
+    <!-- Level 1 DFD -->
+    <text x="350" y="320" text-anchor="middle" class="title">Level 1 Data Flow Diagram</text>
+    
+    <!-- Processes -->
+    <rect x="300" y="350" width="150" height="60" rx="5" ry="5" class="process" />
+    <text x="375" y="385" text-anchor="middle" class="label">Manage Bus</text>
+    
+    <rect x="300" y="450" width="150" height="60" rx="5" ry="5" class="process" />
+    <text x="375" y="485" text-anchor="middle" class="label">Display Available Buses</text>
+    
+    <rect x="300" y="550" width="150" height="60" rx="5" ry="5" class="process" />
+    <text x="375" y="585" text-anchor="middle" class="label">Process Booking</text>
+    
+    <!-- External Entities -->
+    <rect x="50" y="450" width="120" height="60" rx="5" ry="5" class="entity" />
+    <text x="110" y="485" text-anchor="middle" class="label">Bus Database</text>
+    
+    <rect x="550" y="450" width="120" height="60" rx="5" ry="5" class="entity" />
+    <text x="610" y="485" text-anchor="middle" class="label">Passenger</text>
+    
+    <!-- Data Flows -->
+    <path d="M 375 410 L 375 450" class="flow" />
+    <text x="385" y="430" text-anchor="middle" class="flow-label">Bus Data</text>
+    
+    <path d="M 170 450 L 300 450" class="flow" />
+    
+    <path d="M 450 480 L 550 480" class="flow" />
+    
+    <path d="M 170 510 L 300 550" class="flow" />
+    
+    <path d="M 550 510 L 450 550" class="flow" />
+    
+    <path d="M 375 510 L 375 550" class="flow" />
+</svg>

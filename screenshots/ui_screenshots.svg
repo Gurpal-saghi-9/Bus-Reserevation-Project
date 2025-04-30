@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="1200" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .screenshot {
+            fill: #ffffff;
+            stroke: #4361ee;
+            stroke-width: 2;
+        }
+        .text {
+            fill: #212529;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        .header {
+            fill: #3a0ca3;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .border {
+            fill: none;
+            stroke: #cccccc;
+            stroke-width: 1;
+        }
+    </style>
+    
+    <text x="400" y="30" text-anchor="middle" class="header">Bus Reservation System UI Screenshots</text>
+    
+    <!-- Home Page / Header -->
+    <rect x="100" y="50" width="600" height="200" rx="5" ry="5" class="screenshot" />
+    <text x="400" y="270" text-anchor="middle" class="header">Home Page &amp; Navigation</text>
+    
+    <!-- Header in Blue -->
+    <rect x="120" y="70" width="560" height="80" rx="10" ry="10" fill="#4361ee" />
+    <text x="400" y="110" text-anchor="middle" font-family="Arial" font-size="24" fill="white" font-weight="bold">Premium Bus Reservation</text>
+    <text x="400" y="135" text-anchor="middle" font-family="Arial" font-size="14" fill="white">Book your journey with comfort and ease</text>
+    
+    <!-- Navigation Buttons -->
+    <rect x="160" y="170" width="120" height="40" rx="20" ry="20" fill="#4361ee" />
+    <text x="220" y="195" text-anchor="middle" font-family="Arial" font-size="14" fill="white">Add New Bus</text>
+    
+    <rect x="300" y="170" width="120" height="40" rx="20" ry="20" fill="#4361ee" />
+    <text x="360" y="195" text-anchor="middle" font-family="Arial" font-size="14" fill="white">Book Seat</text>
+    
+    <rect x="440" y="170" width="120" height="40" rx="20" ry="20" fill="#4361ee" />
+    <text x="500" y="195" text-anchor="middle" font-family="Arial" font-size="14" fill="white">View Reservations</text>
+    
+    <!-- Add Bus Form -->
+    <rect x="100" y="300" width="600" height="200" rx="5" ry="5" class="screenshot" />
+    <text x="400" y="520" text-anchor="middle" class="header">Add Bus Form</text>
+    
+    <rect x="120" y="320" width="560" height="160" rx="5" ry="5" class="border" />
+    <text x="140" y="340" font-family="Arial" font-size="18" fill="#3a0ca3" font-weight="bold">Add New Bus</text>
+    
+    <!-- Form Fields (simplified) -->
+    <rect x="140" y="360" width="180" height="30" rx="5" ry="5" class="border" />
+    <text x="150" y="380" font-family="Arial" font-size="12" fill="#888888">Bus Number</text>
+    
+    <rect x="340" y="360" width="180" height="30" rx="5" ry="5" class="border" />
+    <text x="350" y="380" font-family="Arial" font-size="12" fill="#888888">License Number</text>
+    
+    <rect x="140" y="400" width="180" height="30" rx="5" ry="5" class="border" />
+    <text x="150" y="420" font-family="Arial" font-size="12" fill="#888888">Driver's Name</text>
+    
+    <rect x="340" y="400" width="180" height="30" rx="5" ry="5" class="border" />
+    <text x="350" y="420" font-family="Arial" font-size="12" fill="#888888">Driver's Phone</text>
+    
+    <rect x="140" y="440" width="380" height="30" rx="5" ry="5" fill="#4cc9f0" />
+    <text x="330" y="460" text-anchor="middle" font-family="Arial" font-size="14" fill="white">Add Bus</text>
+    
+    <!-- Available Buses -->
+    <rect x="100" y="550" width="600" height="200" rx="5" ry="5" class="screenshot" />
+    <text x="400" y="770" text-anchor="middle" class="header">Available Buses</text>
+    
+    <rect x="120" y="570" width="560" height="160" rx="5" ry="5" class="border" />
+    <text x="140" y="590" font-family="Arial" font-size="18" fill="#3a0ca3" font-weight="bold">Available Buses</text>
+    
+    <!-- Bus Cards -->
+    <rect x="140" y="610" width="250" height="100" rx="5" ry="5" class="border" />
+    <rect x="140" y="610" width="250" height="60" fill="#3a0ca3" />
+    <text x="265" y="645" text-anchor="middle" font-family="Arial" font-size="12" fill="white">Bus Image</text>
+    <text x="150" y="680" font-family="Arial" font-size="14" fill="#212529" font-weight="bold">B1234 - AC</text>
+    <text x="150" y="700" font-family="Arial" font-size="12" fill="#666666">Delhi to Mumbai (8:00 AM)</text>
+    
+    <rect x="410" y="610" width="250" height="100" rx="5" ry="5" class="border" />
+    <rect x="410" y="610" width="250" height="60" fill="#3a0ca3" />
+    <text x="535" y="645" text-anchor="middle" font-family="Arial" font-size="12" fill="white">Bus Image</text>
+    <text x="420" y="680" font-family="Arial" font-size="14" fill="#212529" font-weight="bold">B5678 - Sleeper</text>
+    <text x="420" y="700" font-family="Arial" font-size="12" fill="#666666">Chennai to Bangalore (9:30 AM)</text>
+    
+    <!-- Seat Selection -->
+    <rect x="100" y="800" width="600" height="200" rx="5" ry="5" class="screenshot" />
+    <text x="400" y="1020" text-anchor="middle" class="header">Seat Selection Interface</text>
+    
+    <rect x="120" y="820" width="560" height="160" rx="5" ry="5" class="border" />
+    <text x="140" y="840" font-family="Arial" font-size="18" fill="#3a0ca3" font-weight="bold">Book a Seat</text>
+    
+    <!-- Bus Details -->
+    <rect x="140" y="860" width="540" height="40" rx="5" ry="5" fill="#f8f9fa" />
+    <text x="150" y="885" font-family="Arial" font-size="14" fill="#212529">Bus: B1234 | Delhi to Mumbai | Departure: 8:00 AM</text>
+    
+    <!-- Seat Layout -->
+    <rect x="140" y="910" width="260" height="60" fill="#f8f9fa" />
+    
+    <!-- Seats (simplified) -->
+    <rect x="150" y="920" width="30" height="20" rx="3" ry="3" fill="#f8f9fa" stroke="#4361ee" stroke-width="1" />
+    <text x="165" y="935" text-anchor="middle" font-family="Arial" font-size="12" fill="#212529">1</text>
+    
+    <rect x="190" y="920" width="30" height="20" rx="3" ry="3" fill="#f8f9fa" stroke="#4361ee" stroke-width="1" />
+    <text x="205" y="935" text-anchor="middle" font-family="Arial" font-size="12" fill="#212529">2</text>
+    
+    <rect x="230" y="920" width="30" height="20" rx="3" ry="3" fill="#f8f9fa" stroke="#4361ee" stroke-width="1" />
+    <text x="245" y="935" text-anchor="middle" font-family="Arial" font-size="12" fill="#212529">3</text>
+    
+    <rect x="270" y="920" width="30" height="20" rx="3" ry="3" fill="#f72585" />
+    <text x="285" y="935" text-anchor="middle" font-family="Arial" font-size="12" fill="white">4</text>
+    
+    <rect x="150" y="950" width="30" height="20" rx="3" ry="3" fill="#4361ee" />
+    <text x="165" y="965" text-anchor="middle" font-family="Arial" font-size="12" fill="white">5</text>
+    
+    <rect x="190" y="950" width="30" height="20" rx="3" ry="3" fill="#f8f9fa" stroke="#4361ee" stroke-width="1" />
+    <text x="205" y="965" text-anchor="middle" font-family="Arial" font-size="12" fill="#212529">6</text>
+    
+    <rect x="230" y="950" width="30" height="20" rx="3" ry="3" fill="#f8f9fa" stroke="#4361ee" stroke-width="1" />
+    <text x="245" y="965" text-anchor="middle" font-family="Arial" font-size="12" fill="#212529">7</text>
+    
+    <rect x="270" y="950" width="30" height="20" rx="3" ry="3" fill="#f8f9fa" stroke="#4361ee" stroke-width="1" />
+    <text x="285" y="965" text-anchor="middle" font-family="Arial" font-size="12" fill="#212529">8</text>
+    
+    <!-- Passenger Form -->
+    <rect x="410" y="910" width="270" height="60" rx="5" ry="5" class="border" />
+    <text x="420" y="930" font-family="Arial" font-size="14" fill="#212529">Passenger Details</text>
+    <rect x="420" y="940" width="120" height="20" rx="3" ry="3" class="border" />
+    <text x="430" y="955" font-family="Arial" font-size="12" fill="#888888">Passenger Name</text>
+    <rect x="550" y="940" width="120" height="20" rx="3" ry="3" class="border" />
+    <text x="560" y="955" font-family="Arial" font-size="12" fill="#888888">Phone Number</text>
+    
+    <!-- Reservation Details -->
+    <rect x="100" y="1050" width="600" height="120" rx="5" ry="5" class="screenshot" />
+    <text x="400" y="1190" text-anchor="middle" class="header">Reservation Details</text>
+    
+    <rect x="120" y="1070" width="560" height="80" rx="5" ry="5" class="border" />
+    <text x="140" y="1090" font-family="Arial" font-size="18" fill="#3a0ca3" font-weight="bold">View Reservations</text>
+    
+    <text x="140" y="1120" font-family="Arial" font-size="14" fill="#212529">Bus: B1234 (AC) | Delhi to Mumbai</text>
+    <text x="140" y="1140" font-family="Arial" font-size="14" fill="#212529">Seat 4: John Doe (9876543210)</text>
+    <text x="350" y="1140" font-family="Arial" font-size="14" fill="#212529">Seat 5: Jane Smith (8765432109)</text>
+</svg>

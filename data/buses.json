@@ -1,0 +1,66 @@
+{
+  "buses": [
+    {
+      "busn": "NP",
+      "license": "dfgfcdsxa",
+      "driver": "Raju",
+      "driverPhone": "9867856798",
+      "arrival": "09:30",
+      "depart": "11:00",
+      "from": "Sirhind",
+      "to": "Amritsar",
+      "busType": "Sleeper",
+      "image": "/api/placeholder/500/300",
+      "seats": [
+        [
+          "Empty",
+          "Empty",
+          "Empty",
+          "Guru (7845634956)"
+        ],
+        [
+          "Empty",
+          "Empty",
+          "Empty",
+          "Empty"
+        ],
+        [
+          "Empty",
+          "Empty",
+          "Miku (3456765434)",
+          "Empty"
+        ],
+        [
+          "Empty",
+          "Empty",
+          "Empty",
+          "Empty"
+        ],
+        [
+          "Empty",
+          "Empty",
+          "Empty",
+          "Empty"
+        ],
+        [
+          "Empty",
+          "Mansi (4586725065)",
+          "Empty",
+          "Empty"
+        ],
+        [
+          "Empty",
+          "Empty",
+          "Empty",
+          "Empty"
+        ],
+        [
+          "Empty",
+          "Empty",
+          "Empty",
+          "Empty"
+        ]
+      ]
+    }
+  ]
+}

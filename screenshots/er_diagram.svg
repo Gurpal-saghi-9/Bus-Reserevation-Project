@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .entity {
+            fill: #f8f9fa;
+            stroke: #4361ee;
+            stroke-width: 2;
+        }
+        .title {
+            fill: #3a0ca3;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .attribute {
+            fill: #212529;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        .pk {
+            fill: #f72585;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        .fk {
+            fill: #4cc9f0;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        .relationship {
+            stroke: #4361ee;
+            stroke-width: 2;
+            fill: none;
+        }
+        .arrow {
+            fill: #4361ee;
+        }
+    </style>
+    
+    <!-- Bus Entity -->
+    <rect x="50" y="60" width="150" height="220" rx="5" ry="5" class="entity" />
+    <text x="125" y="85" text-anchor="middle" class="title">Bus</text>
+    <line x1="50" y1="95" x2="200" y2="95" stroke="#4361ee" stroke-width="1" />
+    <text x="60" y="115" class="pk">PK: busn</text>
+    <text x="60" y="135" class="attribute">license</text>
+    <text x="60" y="155" class="attribute">driver</text>
+    <text x="60" y="175" class="attribute">driverPhone</text>
+    <text x="60" y="195" class="attribute">arrival</text>
+    <text x="60" y="215" class="attribute">depart</text>
+    <text x="60" y="235" class="attribute">from</text>
+    <text x="60" y="255" class="attribute">to</text>
+    <text x="60" y="275" class="attribute">busType</text>
+    
+    <!-- Seat Entity -->
+    <rect x="250" y="100" width="150" height="140" rx="5" ry="5" class="entity" />
+    <text x="325" y="125" text-anchor="middle" class="title">Seat</text>
+    <line x1="250" y1="135" x2="400" y2="135" stroke="#4361ee" stroke-width="1" />
+    <text x="260" y="155" class="fk">FK: busn</text>
+    <text x="260" y="175" class="attribute">seatNumber</text>
+    <text x="260" y="195" class="attribute">status</text>
+    <text x="260" y="215" class="fk">FK: passenger</text>
+    
+    <!-- Passenger Entity -->
+    <rect x="450" y="100" width="150" height="100" rx="5" ry="5" class="entity" />
+    <text x="525" y="125" text-anchor="middle" class="title">Passenger</text>
+    <line x1="450" y1="135" x2="600" y2="135" stroke="#4361ee" stroke-width="1" />
+    <text x="460" y="155" class="attribute">Name</text>
+    <text x="460" y="175" class="attribute">Phone</text>
+    
+    <!-- Relationships -->
+    <!-- Bus to Seat -->
+    <path d="M 200 170 L 250 170" class="relationship" />
+    <!-- One-to-many notation -->
+    <polyline points="200,160 210,160 210,180 200,180" class="relationship" />
+    <circle cx="250" cy="170" r="3" class="arrow" />
+    
+    <!-- Seat to Passenger -->
+    <path d="M 400 170 L 450 170" class="relationship" />
+    <!-- One-to-one notation -->
+    <polyline points="400,160 410,160 410,180 400,180" class="relationship" />
+    <polyline points="450,160 440,160 440,180 450,180" class="relationship" />
+    
+    <!-- Legend -->
+    <rect x="50" y="310" width="500" height="60" rx="5" ry="5" fill="#f8f9fa" stroke="#4361ee" stroke-width="1" />
+    <text x="60" y="330" class="pk">PK: Primary Key</text>
+    <text x="60" y="350" class="fk">FK: Foreign Key</text>
+    <text x="200" y="330" class="attribute">One-to-Many Relationship: </text>
+    <polyline points="320,325 330,325 330,335 320,335" class="relationship" />
+    <text x="200" y="350" class="attribute">One-to-One Relationship: </text>
+    <polyline points="320,345 330,345 330,355 320,355" class="relationship" />
+    <polyline points="350,345 340,345 340,355 350,355" class="relationship" />
+</svg>

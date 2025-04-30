@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Bus Reservation System</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Premium Bus Reservation</h1>
+            <p>Book your journey with comfort and ease</p>
+        </header>
+        
+        <nav>
+            <button class="nav-btn" onclick="showPanel('install-panel')">Add New Bus</button>
+            <button class="nav-btn" onclick="showPanel('reservation-panel')">Book Seat</button>
+            <button class="nav-btn" onclick="showPanel('show-panel')">View Reservations</button>
+            <button class="nav-btn" onclick="showPanel('available-panel')">Available Buses</button>
+        </nav>
+        
+        <div id="alert-container"></div>
+        
+        <!-- Add Bus Panel -->
+        <div id="install-panel" class="panel hidden">
+            <h2>Add New Bus</h2>
+            <form id="install-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="busn">Bus Number:</label>
+                        <input type="text" id="busn" name="busn" placeholder="e.g. B1234" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="license">License Number:</label>
+                        <input type="text" id="license" name="license" placeholder="e.g. KA-01-F-2022" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="driver">Driver's Name:</label>
+                        <input type="text" id="driver" name="driver" placeholder="Enter driver name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="driver-phone">Driver's Phone:</label>
+                        <input type="tel" id="driver-phone" name="driver-phone" pattern="[0-9]{10}" placeholder="e.g. 9876543210" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="arrival">Arrival Time:</label>
+                        <input type="time" id="arrival" name="arrival" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="depart">Departure Time:</label>
+                        <input type="time" id="depart" name="depart" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="from">From:</label>
+                        <input type="text" id="from" name="from" placeholder="Starting location" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="to">To:</label>
+                        <input type="text" id="to" name="to" placeholder="Destination" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bus-type">Bus Type:</label>
+                    <select id="bus-type" name="bus-type" required>
+                        <option value="">Select bus type</option>
+                        <option value="Sleeper">Sleeper</option>
+                        <option value="Semi-Sleeper">Semi-Sleeper</option>
+                        <option value="AC">AC</option>
+                        <option value="Non-AC">Non-AC</option>
+                        <option value="Luxury">Luxury</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-success">Add Bus</button>
+            </form>
+        </div>
+        
+        <!-- Reservation Panel -->
+        <div id="reservation-panel" class="panel hidden">
+            <h2>Book a Seat</h2>
+            <form id="reservation-form">
+                <div class="form-group">
+                    <label for="bus-select">Select Bus:</label>
+                    <select id="bus-select" name="bus-select" required>
+                        <option value="">Select a bus</option>
+                    </select>
+                </div>
+                
+                <div id="bus-details" class="bus-info hidden">
+                    <!-- Bus details will be populated here -->
+                </div>
+                
+                <div id="seat-layout" class="seat-layout hidden">
+                    <!-- Seats will be generated here -->
+                </div>
+                
+                <div id="passenger-form" class="hidden">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="passenger-name">Passenger Name:</label>
+                            <input type="text" id="passenger-name" name="passenger-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="passenger-phone">Phone Number:</label>
+                            <input type="tel" id="passenger-phone" name="passenger-phone" pattern="[0-9]{10}" required>
+                        </div>
+                        
+                        <input type="hidden" id="selected-seat" name="selected-seat">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">Book Seat</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Show Reservations Panel -->
+        <div id="show-panel" class="panel hidden">
+            <h2>View Reservations</h2>
+            <div class="form-group">
+                <label for="show-bus-select">Select Bus:</label>
+                <select id="show-bus-select" name="show-bus-select">
+                    <option value="">Select a bus</option>
+                </select>
+            </div>
+            
+            <div id="reservation-details" class="hidden">
+                <!-- Reservation details will be shown here -->
+            </div>
+        </div>
+        
+        <!-- Available Buses Panel -->
+        <div id="available-panel" class="panel hidden">
+            <h2>Available Buses</h2>
+            <div id="available-buses" class="card-grid">
+                <!-- Available buses will be shown here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+          <div class="footer-content">
+            <div class="footer-column">
+              <h3>Premium Bus Reservation</h3>
+              <p>We provide premium bus reservation services with comfort, convenience, and reliability.</p>
+              <div class="social-links">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+              </div>
+            </div>
+            
+            <div class="footer-column">
+              <h3>Quick Links</h3>
+              <ul class="footer-links">
+                <li><a href="#" onclick="showPanel('reservation-panel')">Book a Seat</a></li>
+                <li><a href="#" onclick="showPanel('show-panel')">View Reservations</a></li>
+                <li><a href="#" onclick="showPanel('available-panel')">Available Buses</a></li>
+                <li><a href="#" onclick="showPanel('install-panel')">Add New Bus</a></li>
+              </ul>
+            </div>
+            
+            <div class="footer-column">
+              <h3>Contact Us</h3>
+              <ul class="footer-links">
+                <li><i class="fas fa-map-marker-alt"></i> 123 Bus Station Road, City</li>
+                <li><i class="fas fa-phone-alt"></i> +91 1234567890</li>
+                <li><i class="fas fa-envelope"></i> info@premiumbus.com</li>
+                <li><i class="fas fa-clock"></i> Mon-Sat: 8:00 AM - 8:00 PM</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="footer-bottom">
+            <p>&copy; 2025 Premium Bus Reservation System. All Rights Reserved.</p>
+          </div>
+        </div>
+      </footer>
+    
+    <script src="./script.js"></script>
+</body>
+</html>
