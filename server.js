@@ -1,27 +1,51 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const { pool, db } = require('./db');
 const app = express();
 const PORT = 5000;
+
+// Import routes
+const authRoutes = require('./routes/auth');
+const busesRoutes = require('./routes/buses');
+const bookingsRoutes = require('./routes/bookings');
+const seatsRoutes = require('./routes/seats');
+const profileRoutes = require('./routes/profile');
+const driversRoutes = require('./routes/drivers');
 
 // Middleware
 app.use(express.static('public'));
 app.use(express.json());
+app.use(cookieParser());
 
-// Data file path
+// Session configuration
+app.use(session({
+  secret: 'bus-reservation-system-secret', // In production, this should be an environment variable
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// Legacy file-based data (will be migrated to database)
 const dataFilePath = path.join(__dirname, 'data', 'buses.json');
 
-// Ensure data directory exists
+// Ensure data directory exists for backward compatibility
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
     fs.mkdirSync(path.join(__dirname, 'data'));
 }
 
-// Initialize data file if it doesn't exist
+// Initialize data file if it doesn't exist (for backward compatibility)
 if (!fs.existsSync(dataFilePath)) {
     fs.writeFileSync(dataFilePath, JSON.stringify({ buses: [] }));
 }
 
-// Helper function to read buses data
+// Helper function to read buses data from file (for backward compatibility)
 function readBusesData() {
     try {
         const data = fs.readFileSync(dataFilePath, 'utf8');
@@ -32,7 +56,7 @@ function readBusesData() {
     }
 }
 
-// Helper function to write buses data
+// Helper function to write buses data to file (for backward compatibility)
 function writeBusesData(data) {
     try {
         fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
@@ -44,72 +68,22 @@ function writeBusesData(data) {
 }
 
 // API Routes
-// Get all buses
-app.get('/api/buses', (req, res) => {
+// Legacy API routes (will be migrated to the new routes)
+// Get all buses from file (temporary until full migration)
+app.get('/api/legacy/buses', (req, res) => {
     const data = readBusesData();
     res.json(data.buses);
 });
 
-// Add a new bus
-app.post('/api/buses', (req, res) => {
-    const data = readBusesData();
-    const newBus = req.body;
-    
-    // Check if bus number already exists
-    const existingBusIndex = data.buses.findIndex(bus => bus.busn === newBus.busn);
-    if (existingBusIndex !== -1) {
-        return res.status(400).json({ success: false, message: 'Bus with this number already exists' });
-    }
-    
-    // Add new bus
-    data.buses.push(newBus);
-    
-    // Save data
-    if (writeBusesData(data)) {
-        res.status(201).json({ success: true, message: 'Bus added successfully' });
-    } else {
-        res.status(500).json({ success: false, message: 'Failed to add bus' });
-    }
-});
+// New API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/buses', busesRoutes);
+app.use('/api/bookings', bookingsRoutes);
+app.use('/api/seats', seatsRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/drivers', driversRoutes);
 
-// Book a seat
-app.post('/api/reservations', (req, res) => {
-    const { busNumber, seatNumber, passengerName, passengerPhone } = req.body;
-    
-    // Validate required fields
-    if (!busNumber || !seatNumber || !passengerName || !passengerPhone) {
-        return res.status(400).json({ success: false, message: 'Missing required fields' });
-    }
-    
-    const data = readBusesData();
-    
-    // Find bus
-    const busIndex = data.buses.findIndex(bus => bus.busn === busNumber);
-    if (busIndex === -1) {
-        return res.status(404).json({ success: false, message: 'Bus not found' });
-    }
-    
-    // Calculate row and column from seat number
-    const row = Math.floor((seatNumber - 1) / 4);
-    const col = (seatNumber - 1) % 4;
-    
-    // Check if seat is already booked
-    if (data.buses[busIndex].seats[row][col] !== 'Empty') {
-        return res.status(400).json({ success: false, message: 'Seat already booked' });
-    }
-    
-    // Book seat
-    data.buses[busIndex].seats[row][col] = `${passengerName} (${passengerPhone})`;
-    
-    // Save data
-    if (writeBusesData(data)) {
-        res.status(200).json({ success: true, message: 'Seat booked successfully' });
-    } else {
-        res.status(500).json({ success: false, message: 'Failed to book seat' });
-    }
-});
-
-// Get placeholder images
+// Get placeholder images for buses
 app.get('/api/placeholder/:width/:height', (req, res) => {
     const { width, height } = req.params;
     // Send SVG placeholder image
@@ -134,6 +108,19 @@ app.get('/api/placeholder/:width/:height', (req, res) => {
             <text x="50%" y="65%" font-family="Arial" font-size="16" fill="white" text-anchor="middle">Luxury Travel Experience</text>
         </svg>
     `);
+});
+
+// Serve the index.html for client routes (for SPA-like behavior)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Fallback for other client routes
+app.use((req, res, next) => {
+    if (!req.path.startsWith('/api/')) {
+        return res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    }
+    next();
 });
 
 // Error handling middleware

@@ -64,7 +64,8 @@ The application is built using the following technologies:
 - **File System API**: For data persistence
 
 ### 2.3 Data Storage
-- **JSON**: For storing bus and reservation data
+- **PostgreSQL**: Relational database management system for persistent data storage
+- **Drizzle ORM**: Object-Relational Mapping tool for database interactions
 
 ### 2.4 Development Tools
 - **Visual Studio Code**: Code editor
@@ -78,7 +79,7 @@ The Bus Reservation System follows a client-server architecture with the followi
 ```
 ┌───────────────┐       ┌───────────────┐       ┌───────────────┐
 │   Client      │       │    Server     │       │   Data Store  │
-│  (Browser)    │◄─────►│  (Node.js +   │◄─────►│    (JSON)     │
+│  (Browser)    │◄─────►│  (Node.js +   │◄─────►│  (PostgreSQL) │
 │               │       │   Express)    │       │               │
 └───────────────┘       └───────────────┘       └───────────────┘
 ```
@@ -94,7 +95,7 @@ The backend is built with Node.js and Express.js, providing RESTful API endpoint
 - Viewing reservation details
 
 ### 3.3 Data Storage
-Data is stored in a JSON file structure, with separate records for buses and their seat occupancy status. This provides a lightweight but effective storage solution for the application.
+Data is stored in a PostgreSQL relational database, which provides robust data persistence, transaction support, and data integrity. The system uses Drizzle ORM for database interactions, which provides a type-safe interface for working with the database.
 
 ## 4. Database Design
 

@@ -8,20 +8,139 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-logo">
+            <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="busGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#2563eb" />
+                        <stop offset="100%" stop-color="#0f172a" />
+                    </linearGradient>
+                    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.3" />
+                    </filter>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#busGradient)" rx="20" />
+                <rect x="10%" y="50%" width="80%" height="30%" fill="#ffffff" opacity="0.1" rx="5" />
+                <rect x="5%" y="70%" width="90%" height="15%" fill="#10b981" opacity="0.8" rx="5" filter="url(#shadow)" />
+                <circle cx="25%" cy="85%" r="5%" fill="#333" />
+                <circle cx="75%" cy="85%" r="5%" fill="#333" />
+                <text x="50%" y="35%" font-family="Arial" font-size="24" fill="white" text-anchor="middle" font-weight="bold">Premium Bus</text>
+                <text x="50%" y="45%" font-family="Arial" font-size="16" fill="white" text-anchor="middle">Reservation System</text>
+            </svg>
+            <h2 class="splash-text">Welcome to Premium Bus Reservation</h2>
+        </div>
+        <div class="splash-loading">
+            <div class="loader"></div>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <h1>Premium Bus Reservation</h1>
             <p>Book your journey with comfort and ease</p>
+            <div class="user-menu" id="user-menu">
+                <button class="nav-btn login-btn" onclick="showPanel('auth-panel')">Login / Sign Up</button>
+                <div class="user-logged-in hidden" id="user-logged-in">
+                    <span id="username-display"></span>
+                    <div class="dropdown">
+                        <button class="dropdown-btn"><i class="fas fa-user-circle"></i></button>
+                        <div class="dropdown-content">
+                            <a href="#" onclick="showPanel('profile-panel')">My Profile</a>
+                            <a href="#" onclick="showPanel('my-bookings-panel')">My Bookings</a>
+                            <a href="#" onclick="logoutUser()">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </header>
         
-        <nav>
-            <button class="nav-btn" onclick="showPanel('install-panel')">Add New Bus</button>
+        <nav id="main-nav">
+            <button class="nav-btn" onclick="showPanel('available-panel')">Available Buses</button>
             <button class="nav-btn" onclick="showPanel('reservation-panel')">Book Seat</button>
             <button class="nav-btn" onclick="showPanel('show-panel')">View Reservations</button>
-            <button class="nav-btn" onclick="showPanel('available-panel')">Available Buses</button>
+            <button class="nav-btn admin-only hidden" onclick="showPanel('install-panel')">Add New Bus</button>
+            <button class="nav-btn admin-only hidden" onclick="showPanel('admin-panel')">Admin Panel</button>
+            <button class="nav-btn driver-only hidden" onclick="showPanel('driver-panel')">Driver Panel</button>
         </nav>
         
         <div id="alert-container"></div>
+        
+        <!-- Authentication Panel -->
+        <div id="auth-panel" class="panel">
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button class="auth-tab-btn active" data-tab="login-form">Login</button>
+                    <button class="auth-tab-btn" data-tab="signup-form">Sign Up</button>
+                </div>
+                
+                <div class="auth-forms">
+                    <!-- Login Form -->
+                    <div id="login-form" class="auth-form active">
+                        <h2>Login to Your Account</h2>
+                        <form id="login-form-el">
+                            <div class="form-group">
+                                <label for="login-username">Username</label>
+                                <input type="text" id="login-username" placeholder="Enter your username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">Password</label>
+                                <input type="password" id="login-password" placeholder="Enter your password" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Signup Form -->
+                    <div id="signup-form" class="auth-form">
+                        <h2>Create New Account</h2>
+                        <form id="signup-form-el">
+                            <div class="form-group">
+                                <label for="signup-username">Username</label>
+                                <input type="text" id="signup-username" placeholder="Choose a username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signup-email">Email</label>
+                                <input type="email" id="signup-email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signup-password">Password</label>
+                                <input type="password" id="signup-password" placeholder="Create a password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="signup-fullname">Full Name</label>
+                                <input type="text" id="signup-fullname" placeholder="Enter your full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="signup-phone">Phone Number</label>
+                                <input type="text" id="signup-phone" placeholder="Enter your phone number">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success">Sign Up</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="auth-info">
+                    <div class="auth-hero">
+                        <h2>Welcome to Premium Bus Reservation System</h2>
+                        <p>Create an account or login to:</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Book seats on premium buses</li>
+                            <li><i class="fas fa-check-circle"></i> View your booking history</li>
+                            <li><i class="fas fa-check-circle"></i> Manage your profile and preferences</li>
+                            <li><i class="fas fa-check-circle"></i> Enjoy a smooth booking experience</li>
+                        </ul>
+                        <div class="auth-image">
+                            <img src="/api/placeholder/400/300" alt="Premium Bus">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!-- Add Bus Panel -->
         <div id="install-panel" class="panel hidden">
@@ -155,6 +274,237 @@
             <h2>Available Buses</h2>
             <div id="available-buses" class="card-grid">
                 <!-- Available buses will be shown here -->
+            </div>
+        </div>
+        
+        <!-- User Profile Panel -->
+        <div id="profile-panel" class="panel hidden">
+            <h2>My Profile</h2>
+            <div class="profile-container">
+                <div class="profile-info">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle fa-5x"></i>
+                        </div>
+                        <div>
+                            <h3 id="profile-username">Username</h3>
+                            <p id="profile-role">Role: Passenger</p>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <form id="profile-form">
+                            <div class="form-group">
+                                <label for="profile-email">Email</label>
+                                <input type="email" id="profile-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-fullname">Full Name</label>
+                                <input type="text" id="profile-fullname">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-phone">Phone</label>
+                                <input type="tel" id="profile-phone">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Update Profile</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <div class="password-change">
+                        <h3>Change Password</h3>
+                        <form id="password-form">
+                            <div class="form-group">
+                                <label for="current-password">Current Password</label>
+                                <input type="password" id="current-password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password">New Password</label>
+                                <input type="password" id="new-password" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-warning">Change Password</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- My Bookings Panel -->
+        <div id="my-bookings-panel" class="panel hidden">
+            <h2>My Bookings</h2>
+            <div class="bookings-container">
+                <div class="bookings-filter">
+                    <select id="booking-status-filter">
+                        <option value="all">All Bookings</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div id="user-bookings" class="bookings-list">
+                    <!-- Bookings will be loaded here -->
+                    <div class="no-bookings">
+                        <i class="fas fa-ticket-alt fa-3x"></i>
+                        <p>You don't have any bookings yet</p>
+                        <button class="btn btn-primary" onclick="showPanel('reservation-panel')">Book a Seat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Driver Panel -->
+        <div id="driver-panel" class="panel hidden">
+            <h2>Driver Panel</h2>
+            <div class="driver-container">
+                <div class="driver-section">
+                    <h3>My Assigned Buses</h3>
+                    <div id="driver-buses" class="driver-buses">
+                        <!-- Assigned buses will be shown here -->
+                        <div class="no-buses">
+                            <i class="fas fa-bus fa-3x"></i>
+                            <p>No buses assigned to you yet</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="driver-section">
+                    <h3>Passenger List</h3>
+                    <div class="passenger-selector">
+                        <select id="driver-bus-select">
+                            <option value="">Select a bus</option>
+                        </select>
+                    </div>
+                    <div id="passenger-list" class="passenger-list">
+                        <!-- Passenger list will be shown here -->
+                        <div class="no-passengers">
+                            <i class="fas fa-users fa-3x"></i>
+                            <p>No passengers for this bus yet</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="driver-section">
+                    <h3>Trip Status</h3>
+                    <div class="bus-status-selector">
+                        <select id="status-bus-select">
+                            <option value="">Select a bus</option>
+                        </select>
+                    </div>
+                    <div class="bus-status-controls">
+                        <button class="btn btn-warning" id="bus-departed-btn">Mark as Departed</button>
+                        <button class="btn btn-success" id="bus-arrived-btn">Mark as Arrived</button>
+                        <button class="btn btn-danger" id="bus-cancelled-btn">Cancel Trip</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Admin Panel -->
+        <div id="admin-panel" class="panel hidden">
+            <h2>Admin Panel</h2>
+            <div class="admin-container">
+                <div class="admin-tabs">
+                    <button class="admin-tab-btn active" data-tab="users-management">Users</button>
+                    <button class="admin-tab-btn" data-tab="buses-management">Buses</button>
+                    <button class="admin-tab-btn" data-tab="driver-assignment">Driver Assignment</button>
+                    <button class="admin-tab-btn" data-tab="bookings-management">Bookings</button>
+                </div>
+                
+                <div class="admin-tab-content">
+                    <!-- Users Management -->
+                    <div id="users-management" class="admin-tab-panel active">
+                        <h3>Users Management</h3>
+                        <div class="admin-table-container">
+                            <table class="admin-table" id="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Users will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Buses Management -->
+                    <div id="buses-management" class="admin-tab-panel">
+                        <h3>Buses Management</h3>
+                        <div class="admin-table-container">
+                            <table class="admin-table" id="buses-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Bus Number</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Departure</th>
+                                        <th>Driver</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Buses will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Driver Assignment -->
+                    <div id="driver-assignment" class="admin-tab-panel">
+                        <h3>Driver Assignment</h3>
+                        <div class="assignment-container">
+                            <div class="form-group">
+                                <label for="assign-bus">Select Bus:</label>
+                                <select id="assign-bus">
+                                    <option value="">Select a bus</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="assign-driver">Assign Driver:</label>
+                                <select id="assign-driver">
+                                    <option value="">Select a driver</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" id="assign-btn">Assign Driver</button>
+                        </div>
+                        <div class="assignments-list" id="assignments-list">
+                            <!-- Current assignments will be shown here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Bookings Management -->
+                    <div id="bookings-management" class="admin-tab-panel">
+                        <h3>Bookings Management</h3>
+                        <div class="admin-table-container">
+                            <table class="admin-table" id="bookings-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>User</th>
+                                        <th>Bus</th>
+                                        <th>Seat</th>
+                                        <th>Status</th>
+                                        <th>Payment</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Bookings will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
