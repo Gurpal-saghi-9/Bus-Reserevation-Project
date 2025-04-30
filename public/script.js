@@ -130,6 +130,7 @@ function showAvailableBuses() {
                 <p><strong>Route:</strong> ${bus.from} to ${bus.to}</p>
                 <p><strong>Departure:</strong> ${bus.depart} | <strong>Arrival:</strong> ${bus.arrival}</p>
                 <p><strong>Available Seats:</strong> ${emptySeats} out of 32</p>
+                <p><strong>Ticket Price:</strong> ₹${bus.ticketPrice || 'Not specified'}</p>
                 <p><strong>Driver:</strong> ${bus.driver} (${bus.driverPhone})</p>
             </div>
         `;
@@ -206,6 +207,8 @@ function showBusDetails(busIndex) {
         <p><strong>Driver:</strong> ${bus.driver} | <strong>Phone:</strong> ${bus.driverPhone}</p>
         <p><strong>Route:</strong> ${bus.from} to ${bus.to}</p>
         <p><strong>Departure:</strong> ${bus.depart} | <strong>Arrival:</strong> ${bus.arrival}</p>
+        <p><strong>Ticket Price:</strong> ₹${bus.ticketPrice || 'Not specified'}</p>
+        <p class="selected-seat-info" style="display: none;"><strong>Selected Seat:</strong> <span id="selected-seat-display"></span></p>
     `;
     
     busDetails.classList.remove('hidden');
@@ -226,6 +229,7 @@ function showReservationDetails(busIndex) {
             <p><strong>Driver:</strong> ${bus.driver} | <strong>Phone:</strong> ${bus.driverPhone}</p>
             <p><strong>Route:</strong> ${bus.from} to ${bus.to}</p>
             <p><strong>Departure:</strong> ${bus.depart} | <strong>Arrival:</strong> ${bus.arrival}</p>
+            <p><strong>Ticket Price:</strong> ₹${bus.ticketPrice || 'Not specified'}</p>
         </div>
         <h3>Reserved Seats</h3>
     `;
@@ -274,6 +278,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create empty seats
         const seats = Array(8).fill().map(() => Array(4).fill('Empty'));
         
+        const ticketPrice = document.getElementById('ticket-price').value;
+        
         // Create new bus object
         const newBus = {
             busn,
@@ -285,6 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
             from,
             to,
             busType,
+            ticketPrice,
             image: getRandomBusImage(),
             seats
         };
