@@ -67,12 +67,12 @@
         </header>
         
         <nav id="main-nav">
-            <button class="nav-btn" onclick="showPanel('available-panel')">Available Buses</button>
-            <button class="nav-btn" onclick="showPanel('reservation-panel')">Book Seat</button>
-            <button class="nav-btn" onclick="showPanel('show-panel')">View Reservations</button>
-            <button class="nav-btn" onclick="showPanel('install-panel')">Add New Bus</button>
-            <button class="nav-btn admin-only hidden" onclick="showPanel('admin-panel')">Admin Panel</button>
-            <button class="nav-btn driver-only hidden" onclick="showPanel('driver-panel')">Driver Panel</button>
+            <button class="nav-btn" onclick="showPanel('install-panel')"><i class="fas fa-bus"></i> Add New Bus</button>
+            <button class="nav-btn" onclick="showPanel('reservation-panel')"><i class="fas fa-ticket-alt"></i> Book Seat</button>
+            <button class="nav-btn" onclick="showPanel('show-panel')"><i class="fas fa-list-alt"></i> View Reservations</button>
+            <button class="nav-btn" onclick="showPanel('available-panel')"><i class="fas fa-search"></i> Available Buses</button>
+            <button class="nav-btn admin-only hidden" onclick="showPanel('admin-panel')"><i class="fas fa-user-shield"></i> Admin Panel</button>
+            <button class="nav-btn driver-only hidden" onclick="showPanel('driver-panel')"><i class="fas fa-id-card"></i> Driver Panel</button>
         </nav>
         
         <div id="alert-container"></div>
@@ -695,10 +695,10 @@
             <div class="footer-column">
               <h3>Quick Links</h3>
               <ul class="footer-links">
+                <li><a href="#" onclick="showPanel('install-panel')">Add New Bus</a></li>
                 <li><a href="#" onclick="showPanel('reservation-panel')">Book a Seat</a></li>
                 <li><a href="#" onclick="showPanel('show-panel')">View Reservations</a></li>
                 <li><a href="#" onclick="showPanel('available-panel')">Available Buses</a></li>
-                <li><a href="#" onclick="showPanel('install-panel')">Add New Bus</a></li>
               </ul>
             </div>
             
