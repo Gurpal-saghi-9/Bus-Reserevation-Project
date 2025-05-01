@@ -1,4 +1,5 @@
 :root {
+    /* Light theme (default) */
     --primary: #2563eb;      /* Royal Blue */
     --secondary: #0f172a;    /* Dark Navy */
     --success: #10b981;      /* Emerald Green */
@@ -10,6 +11,54 @@
     --card-bg: #ffffff;      /* Card Background */
     --highlight: #f59e0b;    /* Amber Highlight */
     --warning: #f59e0b;      /* Amber Warning */
+    --gradient-start: rgba(37, 99, 235, 0.05);  /* Light blue gradient */
+    --gradient-end: rgba(139, 92, 246, 0.05);   /* Light purple gradient */
+    --nav-bg: rgba(255, 255, 255, 0.8);         /* Semi-transparent white */
+    --header-text: #1e293b;                     /* Dark text for headers */
+    --border-color: #e2e8f0;                    /* Light border */
+    --shadow-color: rgba(0, 0, 0, 0.1);         /* Light shadow */
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+    --primary: #3b82f6;      /* Brighter Blue */
+    --secondary: #0f172a;    /* Dark Navy */
+    --success: #10b981;      /* Emerald Green */
+    --danger: #f87171;       /* Lighter Red */
+    --light: #1e293b;        /* Dark Navy as background */
+    --dark: #f1f5f9;         /* Light color for dark theme */
+    --accent: #a78bfa;       /* Lighter Purple */
+    --text: #e2e8f0;         /* Light Text */
+    --card-bg: #1e293b;      /* Dark Card Background */
+    --highlight: #fbbf24;    /* Brighter Amber */
+    --warning: #fbbf24;      /* Brighter Amber Warning */
+    --gradient-start: rgba(29, 78, 216, 0.15);  /* Dark blue gradient */
+    --gradient-end: rgba(139, 92, 246, 0.15);   /* Dark purple gradient */
+    --nav-bg: rgba(15, 23, 42, 0.8);            /* Semi-transparent dark navy */
+    --header-text: #f1f5f9;                     /* Light text for headers */
+    --border-color: #334155;                    /* Darker border */
+    --shadow-color: rgba(0, 0, 0, 0.3);         /* Darker shadow */
+}
+
+/* Professional theme */
+[data-theme="professional"] {
+    --primary: #0c4a6e;      /* Deep Blue */
+    --secondary: #0f172a;    /* Dark Navy */
+    --success: #065f46;      /* Deep Green */
+    --danger: #b91c1c;       /* Deep Red */
+    --light: #f8fafc;        /* Very Light Gray Background */
+    --dark: #0f172a;         /* Very Dark Navy */
+    --accent: #6d28d9;       /* Deep Purple */
+    --text: #1e293b;         /* Dark Text */
+    --card-bg: #ffffff;      /* White Card Background */
+    --highlight: #b45309;    /* Deep Amber */
+    --warning: #b45309;      /* Deep Amber Warning */
+    --gradient-start: rgba(12, 74, 110, 0.05);  /* Professional blue gradient */
+    --gradient-end: rgba(12, 74, 110, 0.02);    /* Professional blue gradient lighter */
+    --nav-bg: rgba(248, 250, 252, 0.9);         /* Nearly solid light background */
+    --header-text: #0f172a;                     /* Dark text for headers */
+    --border-color: #cbd5e1;                    /* Medium border */
+    --shadow-color: rgba(0, 0, 0, 0.05);        /* Subtle shadow */
 }
 
 * {
@@ -22,7 +71,8 @@
 body {
     background-color: var(--light);
     color: var(--text);
-    background-image: linear-gradient(to bottom right, rgba(37, 99, 235, 0.05), rgba(139, 92, 246, 0.05));
+    background-image: linear-gradient(to bottom right, var(--gradient-start), var(--gradient-end));
+    transition: all 0.3s ease;
 }
 
 .container {
@@ -118,6 +168,39 @@ header h1, header p, header .user-menu {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 15px;
+}
+
+.theme-switcher {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 5px;
+    margin-right: 15px;
+}
+
+.theme-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.theme-btn.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.theme-btn:hover {
+    transform: scale(1.1);
 }
 
 .login-btn {
@@ -257,15 +340,17 @@ label {
 input, select {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s;
+    background-color: var(--card-bg);
+    color: var(--text);
 }
 
 input:focus, select:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 67, 97, 238), 0.2);
     outline: none;
 }
 
@@ -678,15 +763,25 @@ input:focus, select:focus {
     flex: 1 0 30%;
 }
 
-.password-change {
+.password-change, .logout-section {
     background-color: var(--card-bg);
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
 }
 
-.password-change h3 {
+.password-change h3, .logout-section h3 {
     margin-bottom: 20px;
+}
+
+.logout-section #logout-btn {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
 /* Bookings Panel Styles */

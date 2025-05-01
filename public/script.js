@@ -39,6 +39,9 @@ function updateUIForLoggedInUser() {
     // Set username display
     document.getElementById('username-display').textContent = currentUser.username;
     
+    // Show main navigation menu
+    document.getElementById('main-nav').classList.remove('hidden');
+    
     // Update profile panel with user info
     document.getElementById('profile-username').textContent = currentUser.username;
     document.getElementById('profile-role').textContent = `Role: ${currentUser.role || 'Passenger'}`;
@@ -80,6 +83,11 @@ function updateUIForLoggedInUser() {
     
     // Load user bookings
     loadUserBookings();
+    
+    // Auto redirect to home/available buses page if on auth panel
+    if (document.getElementById('auth-panel') && !document.getElementById('auth-panel').classList.contains('hidden')) {
+        showPanel('available-panel');
+    }
 }
 
 // Update UI for logged out user
@@ -87,6 +95,9 @@ function updateUIForLoggedOutUser() {
     // Show login button, hide user menu
     document.querySelector('.login-btn').classList.remove('hidden');
     document.getElementById('user-logged-in').classList.add('hidden');
+    
+    // Hide main navigation
+    document.getElementById('main-nav').classList.add('hidden');
     
     // Hide role-specific elements
     document.querySelectorAll('.admin-only, .driver-only').forEach(el => {
@@ -98,7 +109,10 @@ function updateUIForLoggedOutUser() {
         'profile-panel', 
         'my-bookings-panel', 
         'admin-panel', 
-        'driver-panel'
+        'driver-panel',
+        'reservation-panel',
+        'show-panel',
+        'install-panel'
     ];
     
     // Check if current visible panel is a protected one
@@ -140,6 +154,12 @@ async function logoutUser() {
 
 // Initialize app with splash screen
 function initApp() {
+    // Apply saved theme if it exists
+    const savedTheme = localStorage.getItem('busReservationTheme');
+    if (savedTheme) {
+        setTheme(savedTheme);
+    }
+    
     // Hide splash screen after animations complete
     setTimeout(() => {
         document.getElementById('splash-screen').style.display = 'none';
@@ -155,6 +175,24 @@ function initApp() {
             }
         });
     }, 2500); // Match the animation duration (2.5s)
+}
+
+// Theme switching functionality
+function setTheme(themeName) {
+    // Remove all existing theme classes
+    document.documentElement.removeAttribute('data-theme');
+    
+    // Set the new theme
+    document.documentElement.setAttribute('data-theme', themeName);
+    
+    // Save the theme preference
+    localStorage.setItem('busReservationTheme', themeName);
+    
+    // Update active button
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.getElementById(`theme-${themeName}`).classList.add('active');
 }
 
 // Load buses from server
